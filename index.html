@@ -1,0 +1,1676 @@
+index.html
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Simulador ICC Bulldog</title>
+
+<style>
+:root {
+  --red: #d7192d;
+  --red-dark: #a90e20;
+  --blue: #092b50;
+  --blue-light: #174d7d;
+  --white: #ffffff;
+  --background: #edf2f8;
+  --gray: #64748b;
+  --border: #d8e1ed;
+  --light-blue: #eaf2fb;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  padding: 25px 15px;
+  background: var(--background);
+  font-family: "Segoe UI", Arial, sans-serif;
+  color: var(--blue);
+}
+
+.container {
+  max-width: 1150px;
+  margin: auto;
+  background: var(--white);
+  border-radius: 22px;
+  overflow: hidden;
+  box-shadow: 0 12px 40px #092b5020;
+}
+
+/* ENCABEZADO */
+
+.header {
+  background: linear-gradient(120deg, var(--blue), #174a78);
+  color: white;
+  padding: 28px;
+  text-align: center;
+  position: relative;
+  border-bottom: 7px solid var(--red);
+}
+
+.header h1 {
+  font-size: clamp(23px, 4vw, 35px);
+  margin: 0 0 8px;
+}
+
+.header p {
+  color: #dce9f7;
+  margin: 0;
+  font-size: 16px;
+}
+
+.paw {
+  font-size: 30px;
+  margin: 0 12px;
+}
+
+/* PORTADA */
+
+.hero {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  align-items: center;
+  gap: 25px;
+  padding: 25px;
+  background: linear-gradient(120deg, #fff, #f1f6fc);
+  border-bottom: 1px solid var(--border);
+}
+
+.dog-svg {
+  width: 100%;
+  max-width: 290px;
+  margin: auto;
+  display: block;
+}
+
+.hero-text h2 {
+  color: var(--blue);
+  font-size: 24px;
+  margin-top: 0;
+}
+
+.hero-text p {
+  line-height: 1.7;
+  color: #52647a;
+  font-size: 15px;
+}
+
+.hero-tag {
+  display: inline-block;
+  background: #fce8eb;
+  color: var(--red-dark);
+  padding: 8px 13px;
+  border-radius: 20px;
+  font-weight: bold;
+  font-size: 13px;
+}
+
+/* CONTENIDO */
+
+.main { padding: 25px; }
+
+.columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 22px;
+  align-items: start;
+}
+
+.panel {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 15px;
+  overflow: hidden;
+  margin-bottom: 22px;
+  box-shadow: 0 4px 13px #092b500b;
+}
+
+.panel-title {
+  background: var(--blue);
+  color: white;
+  padding: 14px 18px;
+  font-size: 19px;
+  font-weight: 700;
+  border-left: 7px solid var(--red);
+}
+
+.panel-content { padding: 20px; }
+
+.panel-title.red {
+  background: var(--red);
+  border-left-color: var(--blue);
+}
+
+.panel-title small {
+  font-weight: normal;
+  font-size: 12px;
+  display: block;
+  opacity: .85;
+  margin-top: 3px;
+}
+
+/* FORMULARIOS */
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.field { margin-bottom: 3px; }
+
+label {
+  display: block;
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 7px;
+}
+
+input, select, textarea {
+  width: 100%;
+  padding: 12px;
+  background: #fbfdff;
+  border: 1px solid #cbd7e5;
+  border-radius: 9px;
+  font-size: 14px;
+  color: var(--blue);
+  outline: none;
+  transition: .2s;
+}
+
+input:focus, select:focus, textarea:focus {
+  border-color: var(--red);
+  box-shadow: 0 0 0 3px #d7192d18;
+}
+
+textarea {
+  min-height: 90px;
+  resize: vertical;
+}
+
+/* EVALUACIÓN */
+
+.question {
+  padding: 15px;
+  background: #f7f9fc;
+  border: 1px solid #e2e9f1;
+  border-radius: 11px;
+  margin-bottom: 13px;
+}
+
+.question-title {
+  font-weight: 700;
+  font-size: 15px;
+  margin-bottom: 5px;
+}
+
+.question-desc {
+  color: var(--gray);
+  font-size: 13px;
+  margin-bottom: 10px;
+  line-height: 1.5;
+}
+
+.question select { background: white; }
+
+/* BOTONES */
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 20px 0;
+}
+
+button {
+  border: none;
+  border-radius: 10px;
+  padding: 14px 22px;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: .2s;
+}
+
+button:hover {
+  transform: translateY(-2px);
+  filter: brightness(.95);
+}
+
+.primary {
+  background: var(--red);
+  color: white;
+  flex: 1;
+}
+
+.secondary {
+  background: var(--blue);
+  color: white;
+  min-width: 130px;
+}
+
+/* RESULTADOS */
+
+#resultado {
+  display: none;
+  margin-top: 25px;
+}
+
+.result-card {
+  background: linear-gradient(135deg, #092b50, #174d7d);
+  border-radius: 16px;
+  padding: 25px;
+  color: white;
+  text-align: center;
+}
+
+.result-card h2 {
+  margin-top: 0;
+  color: white;
+}
+
+.result-number {
+  background: white;
+  color: var(--red);
+  display: inline-block;
+  border: 4px solid var(--red);
+  border-radius: 15px;
+  padding: 10px 35px;
+  font-size: 42px;
+  font-weight: 800;
+  margin: 12px;
+}
+
+.result-name {
+  font-size: 24px;
+  font-weight: bold;
+  margin: 8px;
+}
+
+.result-category {
+  color: #dce9f7;
+  font-size: 15px;
+}
+
+.result-description {
+  background: #ffffff18;
+  border-radius: 10px;
+  padding: 14px;
+  margin-top: 18px;
+  line-height: 1.5;
+}
+
+/* TABLAS */
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 12px;
+  font-size: 14px;
+}
+
+th {
+  background: var(--blue);
+  color: white;
+  padding: 12px;
+  text-align: left;
+}
+
+td {
+  padding: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+tr:nth-child(even) { background: #f4f7fb; }
+
+/* AVISOS */
+
+.warning {
+  background: #fff4dc;
+  color: #805400;
+  border-left: 5px solid #e3a51d;
+  padding: 15px;
+  border-radius: 8px;
+  margin-top: 15px;
+  line-height: 1.5;
+}
+
+.success {
+  background: #e8f4ed;
+  color: #24603b;
+  border-left: 5px solid #39965c;
+  padding: 15px;
+  border-radius: 8px;
+  margin-top: 15px;
+  line-height: 1.5;
+}
+
+.recommendation {
+  background: var(--light-blue);
+  padding: 16px;
+  border-radius: 10px;
+  line-height: 1.7;
+}
+
+.info {
+  font-size: 12px;
+  line-height: 1.6;
+  color: #64748b;
+  background: #f3f6fa;
+  border-radius: 10px;
+  padding: 14px;
+  margin-top: 18px;
+}
+
+.footer {
+  text-align: center;
+  background: var(--blue);
+  color: white;
+  padding: 20px;
+  font-size: 13px;
+  border-top: 5px solid var(--red);
+}
+
+/* NAVEGACIÓN Y SEGUNDA PÁGINA */
+
+.navigation {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 15px;
+  background: #fff;
+  border-bottom: 1px solid var(--border);
+}
+
+.nav-button {
+  background: var(--blue);
+  color: #fff;
+  border: 2px solid var(--blue);
+  padding: 12px 24px;
+  border-radius: 9px;
+}
+
+.nav-button.active {
+  background: var(--red);
+  border-color: var(--red);
+}
+
+.page { display: none; }
+.page.active { display: block; }
+
+.info-hero {
+  background: linear-gradient(120deg, var(--blue), var(--blue-light));
+  color: #fff;
+  text-align: center;
+  padding: 38px 24px;
+  border-bottom: 6px solid var(--red);
+}
+
+.info-hero h2 {
+  color: #fff;
+  font-size: clamp(25px, 4vw, 34px);
+  margin: 0 0 12px;
+}
+
+.info-hero p {
+  color: #e2edf8;
+  max-width: 780px;
+  line-height: 1.7;
+  margin: auto;
+}
+
+.info-container {
+  max-width: 1050px;
+  padding: 25px;
+  margin: auto;
+}
+
+.info-section {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 22px;
+  margin-bottom: 22px;
+  box-shadow: 0 4px 13px #092b500b;
+}
+
+.info-section h3 {
+  color: var(--blue);
+  border-left: 5px solid var(--red);
+  padding-left: 12px;
+  margin: 0 0 15px;
+}
+
+.info-section p {
+  color: #52647a;
+  line-height: 1.8;
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 15px;
+}
+
+.info-item {
+  background: #f3f7fc;
+  border-radius: 12px;
+  padding: 17px;
+  border-top: 4px solid var(--red);
+  margin: 12px 0;
+}
+
+.info-item h4 {
+  color: var(--blue);
+  margin: 0 0 8px;
+}
+
+.info-item p {
+  font-size: 14px;
+  margin: 7px 0 0;
+}
+
+.component-item { margin: 15px 0; }
+
+.info-number {
+  display: inline-grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--blue);
+  color: white;
+  margin-right: 7px;
+}
+
+.info-callout {
+  background: var(--light-blue);
+  border-left: 5px solid var(--red);
+  border-radius: 8px;
+  padding: 16px;
+  color: var(--blue);
+  line-height: 1.7;
+  margin-top: 15px;
+}
+
+.info-disclaimer {
+  background: #fff4dc;
+  border-left: 5px solid #e3a51d;
+  border-radius: 8px;
+  padding: 16px;
+  color: #805400;
+  line-height: 1.7;
+}
+
+.scale-list {
+  display: grid;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.scale-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  justify-content: space-between;
+  padding: 13px;
+  border-radius: 9px;
+  background: #f3f7fc;
+  color: var(--blue);
+}
+
+.scale-row strong { color: var(--red-dark); }
+
+.info-return {
+  max-width: 280px;
+  width: 100%;
+}
+
+/* RESPONSIVE */
+
+@media(max-width: 760px) {
+  .hero {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .columns { grid-template-columns: 1fr; }
+  .form-grid { grid-template-columns: 1fr; }
+  .main { padding: 15px; }
+}
+
+@media(max-width: 650px) {
+  .info-grid { grid-template-columns: 1fr; }
+  .info-container { padding: 15px; }
+  .scale-row { display: block; }
+  .scale-row span {
+    display: block;
+    margin-top: 5px;
+  }
+}
+
+@media print {
+  body {
+    background: white;
+    padding: 0;
+  }
+
+  .container { box-shadow: none; }
+  .actions { display: none; }
+  .navigation { display: none; }
+  .page { display: none !important; }
+  #paginaSimulador.active { display: block !important; }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<header class="header">
+  <div>
+    <span class="paw"></span>
+    <span class="paw"></span>
+  </div>
+  <h1>Simulador de Índice de Condición Corporal</h1>
+  <p>Evaluación física orientativa en perros Bulldog</p>
+</header>
+
+<nav class="navigation" aria-label="Navegación principal">
+  <button type="button" class="nav-button active"
+    onclick="mostrarPagina('simulador', this)">
+    Simulador ICC
+  </button>
+
+  <button type="button" class="nav-button"
+    onclick="mostrarPagina('informacion', this)">
+    Conoce el ICC
+  </button>
+</nav>
+
+<div id="paginaSimulador" class="page active">
+
+<!-- ILUSTRACIÓN VECTORIAL INTEGRADA -->
+
+<section class="hero">
+
+<svg class="dog-svg" viewBox="0 0 340 290"
+xmlns="http://www.w3.org/2000/svg">
+
+<defs>
+  <linearGradient id="fur" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#e3b887"/>
+    <stop offset="55%" stop-color="#b77a48"/>
+    <stop offset="100%" stop-color="#80502f"/>
+  </linearGradient>
+
+  <linearGradient id="lightfur" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="#fff0d8"/>
+    <stop offset="100%" stop-color="#d6b18c"/>
+  </linearGradient>
+
+  <filter id="shadow">
+    <feGaussianBlur stdDeviation="4"/>
+  </filter>
+</defs>
+
+<!-- Sombra -->
+<ellipse cx="170" cy="265" rx="115" ry="10"
+fill="#092b50" opacity=".15" filter="url(#shadow)"/>
+
+<!-- Cuerpo -->
+<path d="M75 154 Q75 113 120 116
+Q165 105 215 119 Q270 128 274 177
+L264 229 Q243 249 215 238
+L205 212 L130 215 L120 242
+Q91 253 75 226Z"
+fill="url(#fur)" stroke="#80502f" stroke-width="3"/>
+
+<!-- Pecho -->
+<path d="M120 135 Q152 118 177 147
+Q192 176 177 220
+Q153 242 121 216
+Q104 177 120 135Z"
+fill="url(#lightfur)"/>
+
+<!-- Patas -->
+<path d="M93 206 L89 254 Q89 266 110 266
+L130 263 L128 217Z"
+fill="url(#fur)" stroke="#80502f" stroke-width="3"/>
+
+<path d="M206 208 L210 255 Q212 268 232 266
+L251 260 L243 212Z"
+fill="url(#fur)" stroke="#80502f" stroke-width="3"/>
+
+<!-- Cabeza -->
+<path d="M85 102 Q75 57 111 35
+Q144 14 181 35 Q220 31 246 70
+Q266 105 242 146 Q220 180 166 176
+Q109 173 88 139Z"
+fill="url(#fur)" stroke="#80502f" stroke-width="4"/>
+
+<!-- Orejas -->
+<path d="M103 65 Q60 17 62 80
+Q65 115 105 113Z"
+fill="#895332" stroke="#70442b" stroke-width="4"/>
+
+<path d="M223 65 Q271 17 270 80
+Q268 115 230 113Z"
+fill="#895332" stroke="#70442b" stroke-width="4"/>
+
+<path d="M84 76 Q76 55 76 82 L97 101Z"
+fill="#d6a078"/>
+
+<path d="M249 76 Q259 55 257 82 L235 101Z"
+fill="#d6a078"/>
+
+<!-- Máscara facial -->
+<path d="M110 100 Q115 67 164 68
+Q218 66 224 102
+Q227 148 167 163
+Q109 150 110 100Z"
+fill="url(#lightfur)"/>
+
+<!-- Ojos -->
+<ellipse cx="130" cy="96" rx="10" ry="13" fill="#241b18"/>
+<ellipse cx="201" cy="96" rx="10" ry="13" fill="#241b18"/>
+<circle cx="133" cy="91" r="3" fill="white"/>
+<circle cx="204" cy="91" r="3" fill="white"/>
+
+<!-- Arrugas -->
+<path d="M111 76 Q165 61 222 77
+M115 86 Q165 73 218 87
+M120 98 Q165 87 214 99"
+stroke="#93623f" stroke-width="4" fill="none"
+stroke-linecap="round" opacity=".8"/>
+
+<!-- Hocico -->
+<ellipse cx="166" cy="132" rx="47" ry="32"
+fill="#d6b18c"/>
+
+<ellipse cx="166" cy="118" rx="21" ry="15"
+fill="#30201b"/>
+
+<ellipse cx="159" cy="113" rx="6" ry="3"
+fill="#78645c"/>
+
+<!-- Boca -->
+<path d="M166 131 L166 151
+M166 151 Q145 166 131 150
+M166 151 Q185 166 201 149"
+stroke="#493128" stroke-width="4"
+fill="none" stroke-linecap="round"/>
+
+<!-- Pliegues del hocico -->
+<path d="M120 125 Q132 137 143 126
+M209 125 Q198 137 188 126"
+stroke="#aa805c" stroke-width="3" fill="none"/>
+
+<!-- Collar -->
+<path d="M110 174 Q166 190 222 173"
+stroke="#092b50" stroke-width="12" fill="none"/>
+
+<circle cx="166" cy="185" r="9" fill="#d7192d"/>
+<circle cx="166" cy="185" r="4" fill="#f5d77d"/>
+
+<!-- Uñas -->
+<path d="M97 260 L101 267 M111 261 L115 267
+M220 261 L224 267 M236 260 L240 267"
+stroke="#fff0d8" stroke-width="3" stroke-linecap="round"/>
+
+</svg>
+
+<div class="hero-text">
+  <span class="hero-tag">EVALUACIÓN VETERINARIA EDUCATIVA</span>
+  <h2>Conoce la condición corporal de tu gordo</h2>
+
+  <p>
+    Evalúa las características físicas de tu perro para obtener
+    una estimación de su Índice de Condición Corporal (ICC).
+    El simulador analiza la palpación de las costillas, la cintura,
+    el abdomen y los depósitos de grasa.
+  </p>
+
+  <p><strong>Escala utilizada:</strong> 1 a 9 puntos.</p>
+</div>
+
+</section>
+
+<main class="main">
+
+<form id="formulario">
+
+<div class="columns">
+
+<!-- COLUMNA IZQUIERDA -->
+
+<div>
+
+<section class="panel">
+  <div class="panel-title red">Datos del perro</div>
+
+  <div class="panel-content">
+    <div class="form-grid">
+
+      <div class="field">
+        <label for="nombre">Nombre</label>
+        <input id="nombre" placeholder="Ej. Daniel" required>
+      </div>
+
+      <div class="field">
+        <label for="raza">Raza</label>
+        <select id="raza">
+          <option>Bulldog inglés</option>
+          <option>Bulldog francés</option>
+          <option>Bulldog americano</option>
+          <option>Otro</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="edad">Edad (años)</label>
+        <input id="edad" type="number" min="0" max="30" step=".1">
+      </div>
+
+      <div class="field">
+        <label for="sexo">Sexo</label>
+        <select id="sexo">
+          <option>Macho</option>
+          <option>Hembra</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="peso">Peso actual (kg)</label>
+        <input id="peso" type="number" min="0" step=".1">
+      </div>
+
+      <div class="field">
+        <label for="reproductivo">Estado reproductivo</label>
+        <select id="reproductivo">
+          <option>No esterilizado</option>
+          <option>Esterilizado</option>
+          <option>No definido</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="actividad">Actividad física</label>
+        <select id="actividad">
+          <option>Baja</option>
+          <option>Moderada</option>
+          <option>Alta</option>
+        </select>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="panel">
+  <div class="panel-title red">
+    Evaluación física
+    <small>Selecciona las características que observes y palpes</small>
+  </div>
+
+  <div class="panel-content">
+
+    <div class="question">
+      <div class="question-title">A. Costillas</div>
+      <div class="question-desc">
+        ¿Qué tan fáciles son de palpar?
+      </div>
+      <select id="costillas">
+        <option value="2">Muy visibles y sin cobertura de grasa</option>
+        <option value="4">Fáciles de palpar, cobertura mínima</option>
+        <option value="5" selected>Palpables con ligera cobertura</option>
+        <option value="7">Difíciles de palpar por grasa</option>
+        <option value="9">No se pueden palpar por la grasa</option>
+      </select>
+    </div>
+
+    <div class="question">
+      <div class="question-title">B. Cintura</div>
+      <div class="question-desc">
+        Vista desde arriba, ¿se distingue una cintura?
+      </div>
+      <select id="cintura">
+        <option value="3">Extremadamente marcada</option>
+        <option value="4">Claramente visible</option>
+        <option value="5" selected>Se distingue de forma proporcionada</option>
+        <option value="7">Apenas se distingue</option>
+        <option value="9">No existe cintura visible</option>
+      </select>
+    </div>
+
+    <div class="question">
+      <div class="question-title">C. Abdomen</div>
+      <div class="question-desc">
+        Visto de lado, ¿cómo es el recogimiento abdominal?
+      </div>
+      <select id="abdomen">
+        <option value="3">Muy pronunciado</option>
+        <option value="4">Claramente visible</option>
+        <option value="5" selected>Moderado y proporcionado</option>
+        <option value="7">Poco o ningún recogimiento</option>
+        <option value="9">Abdomen redondeado o colgante</option>
+      </select>
+    </div>
+
+    <div class="question">
+      <div class="question-title">D. Zona lumbar</div>
+      <div class="question-desc">
+        ¿Se observan depósitos de grasa en la espalda baja?
+      </div>
+      <select id="lumbar">
+        <option value="3">Huesos muy prominentes</option>
+        <option value="4">Cobertura mínima</option>
+        <option value="5" selected>Ligera cobertura</option>
+        <option value="7">Depósitos de grasa evidentes</option>
+        <option value="9">Acumulación abundante de grasa</option>
+      </select>
+    </div>
+
+    <div class="question">
+      <div class="question-title">E. Base de la cola</div>
+      <div class="question-desc">
+        ¿Cómo se percibe la cobertura de grasa?
+      </div>
+      <select id="cola">
+        <option value="3">Huesos muy prominentes</option>
+        <option value="4">Cobertura mínima</option>
+        <option value="5" selected>Ligera cobertura</option>
+        <option value="7">Grasa evidente al tacto</option>
+        <option value="9">Depósitos abundantes de grasa</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label for="observaciones">Observaciones adicionales</label>
+      <textarea id="observaciones"
+      placeholder="Escribe características importantes del perro..."></textarea>
+    </div>
+
+  </div>
+</section>
+
+</div>
+
+<!-- COLUMNA DERECHA -->
+
+<div>
+
+<section class="panel">
+  <div class="panel-title">Resultado de la evaluación</div>
+
+  <div class="panel-content">
+
+    <div id="placeholder" style="text-align:center;padding:35px 10px;">
+      <div style="font-size:55px">:3</div>
+      <h3>Esperando evaluación</h3>
+      <p style="color:#64748b;line-height:1.6">
+        Completa los datos y selecciona las características físicas
+        para obtener el resultado estimado.
+      </p>
+    </div>
+
+    <div id="resultado" style="display:none">
+
+      <div class="result-card">
+        <h2>Condición corporal</h2>
+        <div class="result-number" id="puntuacion">5 / 9</div>
+        <div class="result-name" id="diagnostico"></div>
+        <div class="result-category" id="categoria"></div>
+        <div class="result-description" id="descripcion"></div>
+      </div>
+
+      <div id="alerta"></div>
+
+      <h3>Ficha del paciente</h3>
+      <div id="ficha"></div>
+
+      <h3>Desglose de la evaluación</h3>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Característica</th>
+            <th>Referencia</th>
+          </tr>
+        </thead>
+        <tbody id="desglose"></tbody>
+      </table>
+
+      <h3>¿Cómo se obtuvo el resultado?</h3>
+      <div id="explicacion" class="recommendation"></div>
+
+      <h3>Recomendaciones</h3>
+      <div id="recomendaciones" class="recommendation"></div>
+
+    </div>
+  </div>
+</section>
+
+<section class="panel">
+  <div class="panel-title red">Información importante</div>
+
+  <div class="panel-content">
+    <p style="line-height:1.7;color:#52647a;font-size:14px">
+      El índice de condición corporal permite valorar las reservas
+      de grasa de un animal. No debe confundirse con el peso corporal:
+      dos perros de la misma raza y peso pueden tener condiciones
+      corporales diferentes.
+    </p>
+
+    <p style="line-height:1.7;color:#52647a;font-size:14px">
+      En los Bulldogs es importante considerar su estructura,
+      musculatura y conformación física al realizar la evaluación.
+    </p>
+  </div>
+</section>
+
+</div>
+</div>
+
+<div class="actions">
+
+  <button type="button" class="primary" onclick="calcularICC()">
+    Calcular ICC
+  </button>
+
+  <button type="reset" class="secondary" onclick="limpiarResultado()">
+    Limpiar
+  </button>
+
+  <button type="button" class="secondary" onclick="window.print()">
+    Imprimir
+  </button>
+
+</div>
+
+</form>
+
+<div class="info">
+<strong>Nota académica:</strong> Este simulador utiliza un método
+didáctico de estimación basado en cinco características físicas.
+La escala clínica de condición corporal de 1 a 9 se establece
+mediante exploración visual y palpación integral. La mediana
+utilizada en este programa no es una fórmula veterinaria oficial
+ni sustituye una evaluación profesional.
+</div>
+
+</main>
+
+</div>
+
+<footer class="footer">
+  SIMULADOR ICC
+  <br>Herramienta educativa para la evaluación de perros Bulldog
+</footer>
+
+</div>
+
+<!-- SEGUNDA PÁGINA: INFORMACIÓN -->
+
+<section id="paginaInformacion" class="page">
+
+  <div class="info-hero">
+    <h2>Conoce el Índice de Condición Corporal</h2>
+    <p>
+      Una guía para que los dueños comprendan cómo observar la
+      condición corporal de sus perros y por qué es importante
+      para su bienestar.
+    </p>
+  </div>
+
+  <div class="info-container">
+
+    <section class="info-section">
+      <h3>¿Qué es el Índice de Condición Corporal?</h3>
+
+      <p>
+        El Índice de Condición Corporal (ICC), también conocido como
+        BCS por sus siglas en inglés, es una herramienta utilizada
+        en medicina veterinaria para estimar las reservas de grasa
+        corporal de un animal mediante observación y palpación.
+      </p>
+
+      <p>
+        A diferencia del peso, el ICC ayuda a valorar cómo se
+        distribuye la grasa en el cuerpo. Dos perros pueden pesar
+        lo mismo y presentar condiciones corporales diferentes
+        debido a su tamaño, estructura y musculatura.
+      </p>
+
+      <div class="info-callout">
+        <strong>En pocas palabras:</strong> el peso indica cuánto
+        pesa el perro; el ICC ayuda a valorar si tiene una cantidad
+        adecuada de grasa corporal.
+      </div>
+    </section>
+
+    <section class="info-section">
+      <h3>¿Por qué es importante evaluar el ICC?</h3>
+
+      <p>
+        La evaluación periódica puede ayudar a reconocer cambios
+        físicos y conversar oportunamente con un médico veterinario
+        sobre la alimentación, actividad y salud del perro.
+      </p>
+
+      <div class="info-grid">
+
+        <article class="info-item">
+          <h4>Prevención del sobrepeso y la obesidad</h4>
+          <p>
+            Permite advertir una acumulación excesiva de grasa y
+            revisar, con orientación profesional, las porciones,
+            premios y actividad física.
+          </p>
+        </article>
+
+        <article class="info-item">
+          <h4>Identificación de delgadez</h4>
+          <p>
+            Ayuda a reconocer una cobertura de grasa reducida,
+            que puede relacionarse con alimentación insuficiente
+            o problemas de salud que requieren revisión.
+          </p>
+        </article>
+
+        <article class="info-item">
+          <h4>Seguimiento a lo largo del tiempo</h4>
+          <p>
+            Registrar evaluaciones sucesivas permite observar
+            tendencias y valorar si los cambios de manejo están
+            dando resultado.
+          </p>
+        </article>
+
+        <article class="info-item">
+          <h4>Bienestar y calidad de vida</h4>
+          <p>
+            Mantener una condición corporal adecuada favorece
+            la movilidad y puede reducir riesgos asociados con
+            el exceso o la falta de grasa corporal.
+          </p>
+        </article>
+
+      </div>
+    </section>
+
+    <section class="info-section">
+      <h3>¿Quiénes pueden consultar este simulador?</h3>
+
+      <p>
+        Esta herramienta está pensada principalmente para los
+        dueños y responsables del cuidado de perros. Su propósito
+        es educativo: ayudarles a conocer qué aspectos se observan
+        al evaluar la condición corporal y cuándo conviene pedir
+        una revisión veterinaria.
+      </p>
+
+      <div class="info-grid">
+
+        <article class="info-item">
+          <h4>Dueños de perros</h4>
+          <p>
+            Son los usuarios principales. Pueden aprender a observar
+            y palpar de forma básica a su mascota, registrar sus
+            características y comprender el significado orientativo
+            del resultado.
+          </p>
+        </article>
+
+        <article class="info-item">
+          <h4>Estudiantes de veterinaria</h4>
+          <p>
+            Pueden utilizarlo como material de apoyo para estudiar
+            los componentes físicos que participan en la valoración
+            de la condición corporal.
+          </p>
+        </article>
+
+        <article class="info-item">
+          <h4>Médicos veterinarios</h4>
+          <p>
+            Pueden mostrarlo como recurso didáctico para explicar
+            a los propietarios qué se evalúa. No reemplaza la
+            exploración clínica ni una herramienta profesional validada.
+          </p>
+        </article>
+
+        <article class="info-item">
+          <h4>Cuidadores y paseadores</h4>
+          <p>
+            Quienes participan en el cuidado cotidiano pueden
+            conocer señales generales y comunicar cambios
+            observados al propietario.
+          </p>
+        </article>
+
+      </div>
+
+      <div class="info-callout">
+        <strong>Objetivo principal:</strong> acercar información
+        veterinaria básica a los propietarios para que participen
+        de manera informada y responsable en el cuidado de sus mascotas.
+      </div>
+    </section>
+
+    <section class="info-section">
+      <h3>¿Cómo aporta cada característica a la evaluación?</h3>
+
+      <p>
+        El ICC clínico no se obtiene sumando puntos independientes
+        de cada parte del cuerpo. El profesional integra la
+        observación y palpación de varias regiones para asignar
+        una puntuación global. Cada componente aporta información distinta:
+      </p>
+
+      <article class="info-item component-item">
+        <h4><span class="info-number">1</span> Costillas</h4>
+
+        <p>
+          Se palpan a los lados del tórax. En una condición ideal
+          deben sentirse con facilidad, con una cobertura ligera
+          de grasa, sin que sobresalgan exageradamente.
+        </p>
+
+        <p>
+          <strong>¿Qué aportan?</strong> Informan sobre la cobertura
+          de grasa en la caja torácica. Costillas muy prominentes
+          pueden sugerir delgadez; si cuesta palparlas, puede
+          existir exceso de grasa.
+        </p>
+      </article>
+
+      <article class="info-item component-item">
+        <h4><span class="info-number">2</span> Cintura</h4>
+
+        <p>
+          Se observa al perro desde arriba, detrás de las costillas.
+          En una condición ideal suele apreciarse una cintura definida.
+        </p>
+
+        <p>
+          <strong>¿Qué aporta?</strong> Permite valorar el contorno
+          corporal y la acumulación de grasa en los flancos.
+          Una cintura poco visible puede ser compatible con exceso de grasa.
+        </p>
+      </article>
+
+      <article class="info-item component-item">
+        <h4><span class="info-number">3</span> Recogimiento abdominal</h4>
+
+        <p>
+          Se observa desde un costado. En muchos perros, el abdomen
+          se eleva hacia la región posterior después del tórax.
+        </p>
+
+        <p>
+          <strong>¿Qué aporta?</strong> Complementa la valoración
+          del contorno abdominal. La falta de recogimiento puede
+          asociarse con exceso de grasa, pero también depende de
+          la conformación, postura y otros factores.
+        </p>
+      </article>
+
+      <article class="info-item component-item">
+        <h4><span class="info-number">4</span> Zona lumbar</h4>
+
+        <p>
+          Se observa y palpa la región baja de la espalda para
+          valorar la cobertura de grasa sobre las estructuras óseas.
+        </p>
+
+        <p>
+          <strong>¿Qué aporta?</strong> Ayuda a identificar si las
+          prominencias óseas están demasiado marcadas o si existe
+          una acumulación de tejido adiposo.
+        </p>
+      </article>
+
+      <article class="info-item component-item">
+        <h4><span class="info-number">5</span> Base de la cola</h4>
+
+        <p>
+          Se palpa la zona donde comienza la cola para valorar
+          la cobertura de grasa alrededor de esa región.
+        </p>
+
+        <p>
+          <strong>¿Qué aporta?</strong> Complementa la apreciación
+          de los depósitos de grasa. Una cobertura abundante puede
+          apoyar la sospecha de exceso de condición corporal.
+        </p>
+      </article>
+
+      <div class="info-callout">
+        <strong>Importante:</strong> ninguna de estas características
+        determina por sí sola el ICC. Se interpretan en conjunto.
+        La forma corporal propia de cada raza, incluida la musculatura
+        y conformación compacta de los Bulldogs, debe tomarse en cuenta.
+      </div>
+    </section>
+
+    <section class="info-section">
+      <h3>¿Cómo funciona la escala veterinaria de 1 a 9?</h3>
+
+      <p>
+        En la escala de nueve puntos, el valor 1 representa una
+        condición extremadamente delgada y el 9 una obesidad severa.
+        En general, el punto 5 se considera la condición ideal.
+      </p>
+
+      <div class="scale-list">
+
+        <div class="scale-row">
+          <strong>1–3 · Delgadez</strong>
+          <span>Desde muy delgado hasta emaciado.</span>
+        </div>
+
+        <div class="scale-row">
+          <strong>4–5 · Ideal o cercano al ideal</strong>
+          <span>El punto 5 suele representar la condición corporal ideal.</span>
+        </div>
+
+        <div class="scale-row">
+          <strong>6–7 · Exceso de condición corporal</strong>
+          <span>Acumulación creciente de grasa; el 7 suele corresponder a sobrepeso.</span>
+        </div>
+
+        <div class="scale-row">
+          <strong>8–9 · Obesidad</strong>
+          <span>Acumulación marcada o muy marcada de grasa corporal.</span>
+        </div>
+
+      </div>
+    </section>
+
+    <section class="info-section">
+      <h3>Alcances y limitaciones del simulador</h3>
+
+      <p>
+        El simulador tiene una finalidad educativa y está diseñado
+        para orientar a los propietarios sobre las características
+        que se consideran al valorar la condición corporal.
+      </p>
+
+      <div class="info-disclaimer">
+        <strong>Este simulador no sustituye una consulta veterinaria.</strong>
+        El resultado que genera es una estimación didáctica a partir
+        de las respuestas elegidas. La mediana usada en el programa
+        no es una fórmula clínica oficial ni un método validado
+        para asignar el ICC.
+      </div>
+
+      <p>
+        La valoración profesional integra la exploración física,
+        la conformación, la musculatura, la edad, los antecedentes
+        y el estado general del animal. En Bulldogs es especialmente
+        importante no confundir una estructura compacta y musculosa
+        con exceso de grasa.
+      </p>
+    </section>
+
+    <section class="info-section">
+      <h3>El propósito de esta herramienta</h3>
+
+      <p>
+        El propósito es fomentar la tenencia responsable mediante
+        la educación de los propietarios. Comprender qué se observa
+        en una evaluación corporal puede ayudar a detectar cambios,
+        llevar un registro y buscar orientación profesional cuando
+        sea necesario.
+      </p>
+
+      <div style="text-align:center;margin-top:20px">
+        <button type="button" class="primary info-return"
+          onclick="mostrarPagina('simulador', document.querySelectorAll('.nav-button')[0])">
+          Ir al simulador
+        </button>
+      </div>
+    </section>
+
+  </div>
+
+  <footer class="footer">
+    SIMULADOR ICC • MEDICINA VETERINARIA Y ZOOTECNIA
+    <br>Educación, prevención y bienestar animal
+  </footer>
+
+</section>
+
+</div>
+
+<script>
+
+/* FUNCIÓN PARA PROTEGER LOS DATOS MOSTRADOS */
+
+function escapar(texto) {
+  return String(texto).replace(/[&<>"']/g, function(c) {
+    return {
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#039;"
+    }[c];
+  });
+}
+
+/* CÁLCULO DEL ICC */
+
+function calcularICC() {
+
+  const nombre = document.getElementById("nombre").value.trim();
+
+  if (!nombre) {
+    alert("Escribe el nombre del perro antes de continuar.");
+    return;
+  }
+
+  const datos = {
+    nombre,
+    raza: document.getElementById("raza").value,
+    edad: document.getElementById("edad").value || "No especificada",
+    sexo: document.getElementById("sexo").value,
+    peso: document.getElementById("peso").value || "No especificado",
+    reproductivo: document.getElementById("reproductivo").value,
+    actividad: document.getElementById("actividad").value,
+    observaciones: document.getElementById("observaciones").value || "Sin observaciones"
+  };
+
+  const factores = [
+    {
+      nombre: "Costillas",
+      valor: Number(document.getElementById("costillas").value)
+    },
+    {
+      nombre: "Cintura",
+      valor: Number(document.getElementById("cintura").value)
+    },
+    {
+      nombre: "Abdomen",
+      valor: Number(document.getElementById("abdomen").value)
+    },
+    {
+      nombre: "Zona lumbar",
+      valor: Number(document.getElementById("lumbar").value)
+    },
+    {
+      nombre: "Base de la cola",
+      valor: Number(document.getElementById("cola").value)
+    }
+  ];
+
+  const valores = factores
+    .map(f => f.valor)
+    .sort((a,b) => a-b);
+
+  // Estimación didáctica mediante la mediana.
+  const estimacion = valores[2];
+
+  const diferencia = valores[4] - valores[0];
+
+  let diagnostico = "";
+  let categoria = "";
+  let descripcion = "";
+  let recomendacion = "";
+
+  if (estimacion <= 2) {
+
+    diagnostico = "Extremadamente flaquito";
+    categoria = "Muy por debajo del peso ideal";
+
+    descripcion =
+      "Presenta características compatibles con una condición corporal extremadamente baja.";
+
+    recomendacion =
+      "Se recomienda una valoración veterinaria pronta para investigar pérdida de peso, desnutrición u otros problemas de salud.";
+
+  }
+
+  else if (estimacion === 3) {
+
+    diagnostico = "Flaquito";
+    categoria = "Delgadez";
+
+    descripcion =
+      "Los hallazgos sugieren una cobertura de grasa corporal reducida.";
+
+    recomendacion =
+      "Conviene revisar su alimentación y descartar problemas de salud con un veterinario.";
+
+  }
+
+  else if (estimacion === 4) {
+
+    diagnostico = "Un poquito flaquito";
+    categoria = "Ligeramente por debajo del ideal";
+
+    descripcion =
+      "La cobertura corporal parece ligeramente inferior a la condición ideal.";
+
+    recomendacion =
+      "Vigila su evolución y revisa que su alimentación cubra sus necesidades.";
+
+  }
+
+  else if (estimacion === 5) {
+
+    diagnostico = "¡Peso ideal!";
+    categoria = "Condición corporal ideal";
+
+    descripcion =
+      "Los hallazgos seleccionados son compatibles con una condición corporal ideal.";
+
+    recomendacion =
+      "Mantén una alimentación equilibrada, actividad física adecuada y controles veterinarios periódicos.";
+
+  }
+
+  else if (estimacion === 6) {
+
+    diagnostico = "Un poquito gordito";
+    categoria = "Ligeramente por encima del ideal";
+
+    descripcion =
+      "Puede existir una acumulación de grasa ligeramente superior a la deseable.";
+
+    recomendacion =
+      "Revisa las porciones de alimento, los premios y su actividad física.";
+
+  }
+
+  else if (estimacion === 7) {
+
+    diagnostico = "Gordito";
+    categoria = "Sobrepeso";
+
+    descripcion =
+      "Los hallazgos sugieren una acumulación de grasa corporal mayor a la ideal.";
+
+    recomendacion =
+      "Consulta con un veterinario para establecer un plan de alimentación y actividad física.";
+
+  }
+
+  else if (estimacion === 8) {
+
+    diagnostico = "Muy gordito";
+    categoria = "Obesidad";
+
+    descripcion =
+      "Los hallazgos sugieren una acumulación importante de grasa corporal.";
+
+    recomendacion =
+      "Se recomienda una valoración veterinaria para diseñar un programa seguro de control de peso.";
+
+  }
+
+  else {
+
+    diagnostico = "Extremadamente gordito";
+    categoria = "Obesidad severa";
+
+    descripcion =
+      "Los hallazgos son compatibles con una acumulación muy elevada de grasa corporal.";
+
+    recomendacion =
+      "Necesita una evaluación veterinaria para establecer un plan de manejo supervisado.";
+
+  }
+
+  /* MOSTRAR RESULTADOS */
+
+  document.getElementById("placeholder").style.display = "none";
+  document.getElementById("resultado").style.display = "block";
+
+  document.getElementById("puntuacion").textContent =
+    estimacion + " / 9";
+
+  document.getElementById("diagnostico").textContent =
+    diagnostico;
+
+  document.getElementById("categoria").textContent =
+    categoria;
+
+  document.getElementById("descripcion").textContent =
+    descripcion;
+
+  /* FICHA DEL PACIENTE */
+
+  document.getElementById("ficha").innerHTML = `
+    <p><strong>Nombre:</strong> ${escapar(datos.nombre)}</p>
+    <p><strong>Raza:</strong> ${escapar(datos.raza)}</p>
+    <p><strong>Edad:</strong> ${escapar(datos.edad)}</p>
+    <p><strong>Sexo:</strong> ${escapar(datos.sexo)}</p>
+    <p><strong>Peso:</strong> ${escapar(datos.peso)} kg</p>
+    <p><strong>Estado reproductivo:</strong> ${escapar(datos.reproductivo)}</p>
+    <p><strong>Actividad física:</strong> ${escapar(datos.actividad)}</p>
+    <p><strong>Observaciones:</strong> ${escapar(datos.observaciones)}</p>
+  `;
+
+  /* DESGLOSE */
+
+  document.getElementById("desglose").innerHTML =
+    factores.map(f => `
+      <tr>
+        <td>${escapar(f.nombre)}</td>
+        <td>${f.valor}/9</td>
+      </tr>
+    `).join("");
+
+  /* AVISO DE CONSISTENCIA */
+
+  const alerta = document.getElementById("alerta");
+
+  if (diferencia >= 3) {
+
+    alerta.innerHTML = `
+      <div class="warning">
+        <strong>Evaluación poco concordante.</strong>
+        Las características seleccionadas muestran diferencias importantes.
+        Revisa los datos y solicita una valoración veterinaria.
+      </div>`;
+
+  } else {
+
+    alerta.innerHTML = `
+      <div class="success">
+        <strong>Evaluación relativamente concordante.</strong>
+        Los hallazgos seleccionados tienen referencias cercanas.
+        El resultado sigue siendo orientativo.
+      </div>`;
+
+  }
+
+  /* EXPLICACIÓN DEL CÁLCULO */
+
+  document.getElementById("explicacion").innerHTML = `
+    <p>1. Se evaluaron cinco características físicas.</p>
+
+    <p>2. Cada respuesta se asoció con una referencia orientativa
+    de la escala de 1 a 9.</p>
+
+    <p>3. Las cinco referencias se ordenaron de menor a mayor.</p>
+
+    <p>4. Se tomó el valor central, llamado mediana.</p>
+
+    <p>5. Se comprobó la diferencia entre los valores para detectar
+    posibles contradicciones.</p>
+
+    <p><strong>Resultado estimado: ${estimacion}/9.</strong></p>
+
+    <p>La mediana es una herramienta didáctica del simulador,
+    no una fórmula clínica oficial.</p>
+  `;
+
+  /* RECOMENDACIONES */
+
+  document.getElementById("recomendaciones").textContent =
+    recomendacion;
+
+  /* DESPLAZAMIENTO AL RESULTADO */
+
+  document.getElementById("resultado").scrollIntoView({
+    behavior: "smooth",
+    block: "start"
+  });
+
+}
+
+/* LIMPIAR RESULTADOS */
+
+function limpiarResultado() {
+
+  document.getElementById("resultado").style.display = "none";
+
+  document.getElementById("placeholder").style.display = "block";
+
+}
+
+/* CAMBIAR ENTRE PÁGINAS */
+
+function mostrarPagina(pagina, boton) {
+
+  const simulador = document.getElementById("paginaSimulador");
+
+  const informacion = document.getElementById("paginaInformacion");
+
+  simulador.classList.toggle(
+    "active",
+    pagina === "simulador"
+  );
+
+  informacion.classList.toggle(
+    "active",
+    pagina === "informacion"
+  );
+
+  document.querySelectorAll(".nav-button").forEach(b => {
+    b.classList.remove("active");
+  });
+
+  if (boton) {
+    boton.classList.add("active");
+  }
+
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+
+}
+
+</script>
+
+</body>
+</html>
+
